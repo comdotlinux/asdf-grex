@@ -68,14 +68,17 @@ install_version() {
 
   local release_file="$install_path/$TOOL_NAME-$version.tar.gz"
   (
-    mkdir -p "$install_path"
-    download_release "$version" "$release_file"
-    tar -xvzf "$release_file" -C "$install_path" || fail "Could not extract $release_file"
-    rm "$release_file"
 
     local tool_cmd
     tool_cmd="$(echo "$TOOL_TEST" | cut -d' ' -f1)"
-    test -x "$install_path/$tool_cmd" || fail "Expected $install_path/$tool_cmd to be executable."
+
+    mkdir -p "$install_path/bin"
+    download_release "$version" "$release_file"
+    tar -xvzf "$release_file" -C "$install_path" && mv "$tool_cmd" "$install_path/bin"  || fail "Could not extract $release_file"
+    rm "$release_file"
+
+
+    test -x "$install_path/bin/$tool_cmd" || fail "Expected $install_path/bin/$tool_cmd to be executable."
 
     echo "$TOOL_NAME $version installation was successful!"
   ) || (
