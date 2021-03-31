@@ -50,7 +50,7 @@ download_release() {
       fail "Platform $(uname | tr '[:upper:]' '[:lower:]') is not supported"
       ;;
   esac
-  
+
   url="$GH_REPO/releases/download/v${version}/${filename_in_url}"
 
   echo "* Downloading $TOOL_NAME release $version..."
